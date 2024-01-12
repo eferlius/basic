@@ -75,7 +75,11 @@ def list_dirs_deep_this_dir(directory, maxDepth):
     return found_dirs
 
 def is_correct_depth(ofThisPath, wrtToThisPath, depth):
-    return list_operations.count_exceding_char(ofThisPath, wrtToThisPath, '\\') == depth+1
+    if ofThisPath[0] == '/':
+        char = '/'
+    else:
+        char = '\\'
+    return list_operations.count_exceding_char(ofThisPath, wrtToThisPath, char) == depth+1
 
 def is_partial_name_inside(partialName, thisString):
     return partialName in thisString
