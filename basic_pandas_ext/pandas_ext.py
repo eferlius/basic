@@ -4,6 +4,11 @@ note: extension of pandas operations
 """
 import numpy as np
 import pandas as pd
+import datetime
+import time
+
+def this_moment(fmt = '%Y-%m-%d %H-%M-%S'):
+    return datetime.datetime.fromtimestamp(time.time()).strftime(fmt)
 
 def crop_df_wrt_column(df, start_val, end_val = np.nan, column_name = 'time', 
                  reset_zero = False, start_from_zero = False, reset_index = False):
@@ -48,6 +53,12 @@ def crop_df_wrt_column(df, start_val, end_val = np.nan, column_name = 'time',
         The one with time between start_val and end_val.
 
     """
+    if start_val < 0:
+        start_val = np.max(df[column_name].values)+start_val
+    if not np.isnan(end_val): # if end_val is defined
+        if start_val < 0:
+            end_val = np.max(df[column_name].values)+end_val
+
     df_cropped = df.copy()
 
     # consider only the part between start_val and end_val
@@ -67,3 +78,31 @@ def crop_df_wrt_column(df, start_val, end_val = np.nan, column_name = 'time',
         df_cropped.reset_index(drop = True, inplace = True)
 
     return df_cropped
+
+def duplicate_first_n_cols(df, n):
+    # Select first 5 columns of DataFrame
+    first_n_cols = df.iloc[:, :n]
+    # Create copy of first 5 columns
+    first_n_cols_copy = first_n_cols.copy()
+    return first_n_cols_copy
+
+def add_array_as_column(df, arr, col_name, dec_round = 5):    
+    df_add = pd.DataFrame({col_name: np.where(np.isnan(arr), arr, np.round(arr, dec_round))})
+    df = pd.concat([df, df_add], axis = 1)
+    return df
+
+def print_description_in_txt(df, filename = 'this moment'):
+    if filename == 'this moment':
+        filename = '{}.txt'.format(this_moment())
+    description = df.describe()
+    with open(filename, "w") as file:
+        # Write to the file
+        file.write(description.to_string())
+    return description
+
+def print_description_in_csv(df, filename = 'this moment'):
+    if filename == 'this moment':
+        filename = '{}.csv'.format(this_moment())
+    description = df.describe()
+    description.to_csv(filename)
+    return description

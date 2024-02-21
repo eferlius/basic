@@ -46,8 +46,10 @@ def set_parameters(main_title, axes_title, axes_labels, legend, x_ticks, y_ticks
     plt.rc('ytick', labelsize=y_ticks)
 
 def use_default_parameters(type = 'normal'):
-    valid_types = ['small', 'normal', 'big', 'huge']
+    valid_types = ['mini', 'small', 'normal', 'big', 'huge']
     assert type in valid_types, ("valid types are {}. Got {} instead".format(valid_types, type))
+    if type == 'mini':
+        set_parameters(16,14,12,10,8,8,6)
     if type == 'small':
         set_parameters(20,18,16,14,12,12,10)
     if type == 'normal':

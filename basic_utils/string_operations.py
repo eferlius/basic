@@ -12,7 +12,7 @@ def find_characters_around_substring(s, substring, n, skip = 0):
         how many characters after or before (respectively) the occurrence of substring
         if n positive, after
         if n negative, before
-    skip: int (positive) or -1
+    skip : int (positive) or -1
         how many character are skipped after or before (respectively) writing the substring
 
     Returns
